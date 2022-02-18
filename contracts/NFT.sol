@@ -25,4 +25,15 @@ contract NFT is ERC721URIStorage {
         setApprovalForAll(contractAddress, true);
         return newItemId;
     }
+    
+    function burn(uint256 tokenId) public {
+        require(_isApprovedOrOwner(msg.sender, tokenId));
+        _burn(ownerOf(tokenId), tokenId);
+    }
+  
+    function _burn(address owner, uint256 tokenId) internal {
+        _clearApproval(owner, tokenId);
+        _removeTokenFrom(owner, tokenId);
+        emit Transfer(owner, address(0), tokenId);
+    }
 }
